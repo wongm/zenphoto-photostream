@@ -12,7 +12,7 @@ $plugin_description = gettext("Enables you to replicate the photostream function
 $plugin_author = "Marcus Wong (wongm)";
 $plugin_version = '1.0.0'; 
 $plugin_URL = "http://code.google.com/p/wongm-zenphoto-plugins/";
-$option_interface = new photostreamOptions();
+$option_interface = 'photostreamOptions';
 
 require_once(dirname(__FILE__).'/photostream/class-photostream.php');
 require_once(dirname(__FILE__).'/photostream/class-photostream-album.php');

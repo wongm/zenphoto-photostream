@@ -48,7 +48,7 @@ class PhotostreamAlbum extends Album {
 	// overloaded functions inherited from Album
 	// don't want them to do anything
 	function save() {}
-	function loadFileNames() {}
-	function getAlbums() {}
+	function loadFileNames($dirs=false) {}
+	function getAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true) {}
 }
 ?>

@@ -18,19 +18,20 @@ class Photostream extends Album {
 	 * Constructor for Photostream
 	 *
 	 * @param object &$gallery The parent gallery
-	 * @param string $folder8 folder name (UTF8) of the album
 	 * @return Album
 	 */
 	function Photostream(&$gallery, $sqlWhere="", $sqlGroupBy="", $sqlOrderBy="") {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
-			debugLogBacktrace('Bad gallery in instantiation of album '.$folder8);
+			debugLogBacktrace('Bad gallery in instantiation of Photostream');
 			$gallery = $gallery;
 		}	
 		$page = 1;
 		$indexIntoFoundImages = 0;
-		if (is_numeric($_GET['page'])) {
-			if ($_GET['page'] >= 1) {
-				$page = $_GET['page'];
+		if (isset($_GET['page'])) {
+			if (is_numeric($_GET['page'])) {
+				if ($_GET['page'] >= 1) {
+					$page = $_GET['page'];
+				}
 			}
 		}
 		
@@ -143,7 +144,7 @@ class Photostream extends Album {
 	// overloaded functions inherited from Album
 	// don't want them to do anything
 	function save() {}	
-	function loadFileNames() {}	
-	function getAlbums() {}
+	function loadFileNames($dirs=false) {}	
+	function getAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true) {}
 }
 ?>

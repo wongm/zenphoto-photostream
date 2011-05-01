@@ -1,0 +1,57 @@
+<?php
+
+// force UTF-8 Ø
+
+if (!defined('WEBPATH')) die(); $themeResult = getTheme($zenCSS, $themeColor, 'light');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<?php zp_apply_filter('theme_head'); ?>
+	<title><?php echo getBareGalleryTitle(); ?> | Photostream</title>
+	<meta http-equiv="content-type" content="text/html; charset=<?php echo getOption('charset'); ?>" />
+	<link rel="stylesheet" href="<?php echo pathurlencode($zenCSS); ?>" type="text/css" />
+</head>
+
+<body>
+<?php zp_apply_filter('theme_body_open'); ?>
+<div id="main">
+
+	<div id="gallerytitle">
+		<h2><span><?php printHomeLink('', ' | '); ?><a href="<?php echo html_encode(getGalleryIndexURL());?>" title="<?php echo gettext('Albums Index'); ?>"><?php echo getGalleryTitle();?></a> | </span>Photostream</h2>
+	</div>
+
+		<div id="padbox">
+		
+			Displaying <?php echo getNumberCurrentDisplayedRecords(); ?>
+
+			<div id="images">
+			<?php while (next_photostream_image()): ?>
+			<div class="image">
+				<div class="imagethumb"><a href="<?php echo html_encode(getImageLinkURL());?>" title="<?php echo getBareImageTitle();?>"><?php printImageThumb(getAnnotatedImageTitle()); ?></a></div>
+			</div>
+			<?php endwhile; ?>
+
+		</div>
+
+		<?php printPhotostreamPageListWithNav("&laquo; ".gettext("prev"), gettext("next")." &raquo;"); ?>
+		
+	</div>
+</div>
+
+<div id="credit"><?php printCustomPageURL(gettext("Archive View"),"archive"); ?> |
+<?php printZenphotoLink(); ?>
+<?php
+if (function_exists('printUserLogin_out')) {
+	printUserLogin_out(" | ");
+}
+?>
+</div>
+
+<?php
+printAdminToolbox();
+zp_apply_filter('theme_body_close');
+?>
+
+</body>
+</html>

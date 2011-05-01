@@ -47,7 +47,7 @@ function next_photostream_image() {
 	
 	if (is_null($_zp_images)) {
 		set_context(ZP_INDEX | ZP_ALBUM);
-		$_zp_images = $_zp_current_photostream->getImages($all ? 0 : ($_zp_page), null, $sorttype, $sortdirection);
+		$_zp_images = $_zp_current_photostream->getImages($_zp_page);
 		if (empty($_zp_images)) { return false; }
 		$img = array_shift($_zp_images);
 		$_zp_current_image = new PhotostreamImage($_zp_current_album, $img);
