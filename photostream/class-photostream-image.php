@@ -12,7 +12,7 @@ class PhotostreamImage extends _Image {
 
 	function PhotostreamImage(&$album, $filename) {
 		
-		global $_zp_current_album, $_zp_current_photostream;
+		global $_zp_current_album, $_zp_current_photostream, $_zp_gallery;
 				
 		// This is where the magic happens...
 		// load Image data from the magic array from the earlier Photostream DB query
