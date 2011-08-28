@@ -205,8 +205,7 @@ function printPhotostreamPageList($class='pagelist', $id=NULL, $navlen=9) {
  * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
  */
 function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
-	global $_zp_images;
-	if (empty($_zp_images)) { return false; }
+	if (getNumPhotostreamImages() == 0) { return false; }
 	$total = getTotalPhotostreamPages();
 	$current = getCurrentPage();
 	if ($total < 2) {

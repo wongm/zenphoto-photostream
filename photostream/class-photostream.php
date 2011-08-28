@@ -144,6 +144,18 @@ class Photostream extends Album {
 		}
 	}
 	
+	/**
+	 * Returns the number of images in this album (not counting its subalbums)
+	 *
+	 * @return int
+	 */
+	function getNumImages() {
+		if (is_null($this->images)) {
+			return count($this->getImages(0,0,NULL,NULL,false));
+		}
+		return count($this->images);
+	}
+	
 	// overloaded functions inherited from Album
 	// don't want them to do anything
 	function save() {}	
