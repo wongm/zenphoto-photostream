@@ -136,8 +136,11 @@ class Photostream extends Album {
 				$images_per_page = max(1, getOption('photostream_images_per_page'));
 				$pageStart = $firstPageCount + $images_per_page * $fetchPage;
 			}
-			$slice = array_slice($this->images, $pageStart , $images_per_page);
-			return $slice;
+			if (sizeof($this->images) > 0)
+			{
+				return array_slice($this->images, $pageStart , $images_per_page);
+			}
+			return $this->images;
 		}
 	}
 	
