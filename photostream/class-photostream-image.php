@@ -30,6 +30,12 @@ class PhotostreamImage extends _Image {
 			$this->exists = false;
 			return;
 		}
+		
+		// Get list of all columns in the dataset...
+		// Then map from database record to the current item
+		foreach (array_keys($this->data) as $field) {
+			$this->set($field, $this->data[$field]);
+		}
 	}
 	
 	// overloaded functions inherited from _Image
