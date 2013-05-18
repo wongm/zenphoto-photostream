@@ -39,8 +39,16 @@ class Photostream extends Album {
 		$start = (($page * $perPage) - $perPage);
 		$end = $start + $perPage;
 		
+		// Add custom search / group by / ordering parameters
+		// Also ensure security for unpublished images, and images in unpublished albums
 		if (strlen($sqlWhere) > 0) {
-			$this->sqlWhere = " WHERE ($sqlWhere) ";
+			if (!zp_loggedin()) {
+				$this->sqlWhere = " WHERE ($sqlWhere) AND i.`show` = 1 AND a.`show` = 1 ";
+			} else {
+				$this->sqlWhere = " WHERE ($sqlWhere) ";
+			}
+		} else if (!zp_loggedin()) {
+			$this->sqlWhere = " WHERE i.`show` = 1 AND a.`show` = 1 ";
 		}
 		if (strlen($sqlGroupBy) > 0) {
 			$this->sqlGroupBy = " GROUP BY $sqlGroupBy ";
