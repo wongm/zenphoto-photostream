@@ -37,7 +37,7 @@ function getNumPhotostreamImages() {
  *
  * @return bool
  */
-function next_photostream_image() {	
+function next_photostream_image() {
 	global $_zp_images, $_zp_current_image, $_zp_current_album, $_zp_page,
 				 $_zp_current_photostream;
 	
@@ -205,14 +205,166 @@ function printPhotostreamPageList($class='pagelist', $id=NULL, $navlen=9) {
  * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
  */
 function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=false, $nextprev=true, $class='pagelist', $id=NULL, $firstlast=true, $navlen=9) {
-	if (getNumPhotostreamImages() == 0) { return false; }
-	$total = getTotalPhotostreamPages();
 	$current = getCurrentPage();
-	if ($total < 2) {
+	$total = max(1,getTotalPhotostreamPages());
+	$nav = getPhotostreamPageNavList($oneImagePage, $navlen, $firstlast, $current, $total);
+	if (count($nav) < 4) {
 		$class .= ' disabled_nav';
 	}
-	if ($navlen == 0)
+	?>
+	<div <?php if ($id) echo ' id="$id"'; ?> class="<?php echo $class; ?>">
+		<ul class="<?php echo $class; ?>">
+			<?php
+			$prev = $nav['prev'];
+			unset($nav['prev']);
+			$next = $nav['next'];
+			unset($nav['next']);
+			if ($nextprev) {
+				?>
+				<li class="prev">
+					<?php
+					if ($prev) {
+						printLink($prev, html_encode($prevtext), gettext('Previous Page'));
+					} else {
+						?>
+						<span class="disabledlink"><?php echo html_encode($prevtext); ?></span>
+						<?php
+					}
+					?>
+				</li>
+				<?php
+			}
+			$last = NULL;
+			if ($firstlast) {
+				?>
+				<li class="<?php if($current==1) echo 'current'; else echo 'first'; ?>">
+				<?php
+				if($current == 1) {
+					echo '1';
+				} else {
+					printLink($nav[1], 1, gettext("Page 1"));
+				}
+				?>
+				</li>
+				<?php
+				$last = 1;
+				unset($nav[1]);
+			}
+			foreach ($nav as $i=>$link) {
+					$d = $i - $last;
+				if ($d > 2) {
+					?>
+					<li>
+						<?php
+						$k1 = $i - (int) ($i - $last)/2;
+						printLink(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1));
+						?>
+					</li>
+					<?php
+				} else if ($d == 2) {
+					?>
+					<li>
+						<?php
+						$k1 = $last+1;
+						printLink(getPhotostreamPageURL($k1, $total), $k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1));
+						?>
+					</li>
+					<?php
+				}
+				?>
+				<li<?php if ($current==$i) echo ' class="current"'; ?>>
+				<?php
+				if ($i == $current) {
+					echo $i;
+				} else {
+					$title = sprintf(ngettext('Page %1$u','Page %1$u', $i),$i);
+					printLink($link, $i, $title);
+				}
+				?>
+				</li>
+				<?php
+				$last = $i;
+				unset($nav[$i]);
+				if ($firstlast && count($nav) == 1) {
+					break;
+				}
+			}
+			if ($firstlast) {
+				foreach ($nav as $i=>$link) {
+					$d = $i - $last;
+					if ($d > 2) {
+						$k1 = $i - (int) ($i - $last)/2;
+						?>
+						<li>
+							<?php printLink(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
+						</li>
+						<?php
+					} else if ($d == 2) {
+						$k1 = $last+1;
+						?>
+						<li>
+							<?php printLink(getPhotostreamPageURL($k1, $total), $k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
+						</li>
+						<?php
+					}
+					?>
+					<li class="last<?php if ($current == $i) echo ' current'; ?>">
+						<?php
+						if($current == $i)  {
+							echo $i;
+						} else {
+							printLink($link, $i, sprintf(ngettext('Page %u','Page %u',$i),$i));
+						}
+						?>
+					</li>
+				<?php
+				}
+			}
+			if ($nextprev) {
+				?>
+				<li class="next">
+					<?php
+					if ($next) {
+						printLink($next, html_encode($nexttext), gettext('Next Page'));
+					} else {
+						?>
+						<span class="disabledlink"><?php echo html_encode($nexttext); ?></span>
+						<?php
+					}
+					?>
+				</li>
+				<?php
+			}
+			?>
+		</ul>
+	</div>
+	<?php
+}
+
+/**
+ * returns a page nav list.
+ *
+ * @param bool $oneImagePage set to true if there is only one image page as, for instance, in flash themes
+ * @param int $navlen Number of navigation links to show (0 for all pages). Works best if the number is odd.
+ * @param bool $firstlast Add links to the first and last pages of you gallery
+ * @param int $current the current page
+ * @param int $total total number of pages
+ *
+ */
+function getPhotostreamPageNavList($oneImagePage, $navlen, $firstlast, $current, $total) {
+	$result = array();
+	if (hasPrevPhotostreamPage()) {
+		$result['prev'] = getPrevPhotostreamPageURL();
+	} else {
+		$result['prev'] = NULL;
+	}
+	if ($firstlast) {
+		$result[1] = getPhotostreamPageURL(1, $total);
+	}
+
+	if ($navlen == 0) {
 		$navlen = $total;
+	}
 	$extralinks = 2;
 	if ($firstlast) $extralinks = $extralinks + 2;
 	$len = floor(($navlen-$extralinks) / 2);
@@ -221,49 +373,17 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 	$k1 = round(($j-2)/2)+1;
 	$k2 = $total-round(($total-$ilim)/2);
 
-	echo "<div" . (($id) ? " id=\"$id\"" : "") . " class=\"$class\">\n";
-	echo "<ul class=\"$class\">\n";
-	if ($nextprev) {
-		echo "<li class=\"prev\">";
-		printPrevPhotostreamPageLink($prevtext, gettext("Previous Page"));
-		echo "</li>\n";
+	for ($i=$j; $i <= $ilim; $i++) {
+		$result[$i] = getPhotostreamPageURL($i, $total);
 	}
 	if ($firstlast) {
-		echo '<li class="'.($current==1?'current':'first').'">';
-		printLink(getPhotostreamPageURL(1, $total), 1, gettext("Page 1"));
-		echo "</li>\n";
-		if ($j>2) {
-			echo "<li>";
-			printLink(getPhotostreamPageURL($k1, $total), ($j-1>2)?'...':$k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1));
-			echo "</li>\n";
-		}
+		$result[$total] = getPhotostreamPageURL($total, $total);
 	}
-	for ($i=$j; $i <= $ilim; $i++) {
-		echo "<li" . (($i == $current) ? " class=\"current\"" : "") . ">";
-		if ($i == $current) {
-			$title = sprintf(ngettext('Page %1$u (Current Page)','Page %1$u (Current Page)', $i),$i);
-		} else {
-			$title = sprintf(ngettext('Page %1$u','Page %1$u', $i),$i);
-		}
-		printLink(getPhotostreamPageURL($i, $total), $i, $title);
-		echo "</li>\n";
+	if (hasNextPhotostreamPage()) {
+		$result['next'] = getNextPhotostreamPageURL();
+	} else {
+		$result['next'] = NULL;
 	}
-	if ($i < $total) {
-		echo "<li>";
-		printLink(getPhotostreamPageURL($k2, $total), ($total-$i>1)?'...':$k2, sprintf(ngettext('Page %u','Page %u',$k2),$k2));
-		echo "</li>\n";
-	}
-	if ($firstlast && $i <= $total) {
-		echo "\n  <li class=\"last\">";
-		printLink(getPhotostreamPageURL($total, $total), $total, sprintf(ngettext('Page {%u}','Page {%u}',$total),$total));
-		echo "</li>";
-	}
-	if ($nextprev) {
-		echo "<li class=\"next\">";
-		printNextPhotostreamPageLink($nexttext, gettext("Next Page"));
-		echo "</li>\n";
-	}
-	echo "</ul>\n";
-	echo "</div>\n";
+	return $result;
 }
 ?>
