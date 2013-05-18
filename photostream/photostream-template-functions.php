@@ -74,13 +74,17 @@ function next_photostream_image() {
  *
  * @return string
  */
-function getNumberCurrentDisplayedRecords() {
+function getNumberCurrentDisplayedRecords($prefix=NULL, $suffix=NULL) {
 	$lowerBound = (getOption('photostream_images_per_page') * (getCurrentPage() - 1)) + 1;
 	$upperBound = $lowerBound + getOption('photostream_images_per_page') - 1;
+	// reset upper value when on last page
 	if ($upperBound > getNumPhotostreamImages()){
 		$upperBound = getNumPhotostreamImages();
 	}
-	return "$lowerBound to $upperBound";
+	// prevent display if page number is too high
+	if ($upperBound > $lowerBound) {
+		return "$prefix$lowerBound to $upperBound$suffix";
+	}
 }
 
 /**
@@ -92,7 +96,7 @@ function getNumberCurrentDisplayedRecords() {
  * @return int
  */
 function getTotalPhotostreamPages() {
-	$imageCount = max(1, getNumPhotostreamImages());
+	$imageCount = getNumPhotostreamImages();
 	$images_per_page = max(1, getOption('photostream_images_per_page'));
 	$pageCount = ceil($imageCount / $images_per_page);
 	return $pageCount;

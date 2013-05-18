@@ -61,13 +61,8 @@ class Photostream extends Album {
 			INNER JOIN " . prefix('albums') . " a ON i.albumid = a.id 
 			$this->sqlWhere $this->sqlGroupBy $this->sqlOrderBy LIMIT $start, $perPage";
 		$results = query_full_array($sql);
-		
-		// no results - page is off the edge of the world
-		if (sizeof($results) == 0) {
-			return NULL;
-		}
 			
-		// get total number of imges in gallery
+		// get total number of images in gallery
 		$sql = "SELECT count(i.albumid) AS count FROM " . prefix('images') . "  i 
 					INNER JOIN " . prefix('albums') . " a ON i.albumid = a.id 
 					$this->sqlWhere $this->sqlGroupBy";					
@@ -84,8 +79,13 @@ class Photostream extends Album {
 			$totalCount = $totalCounts['count'];
 		}
 		
+		// bake out the found image data
 		for ($i = 0; $i < $totalCount; $i++) {
-			if ($i >= $start && $i < ($start + $perPage)) {
+			if (sizeof($results) == 0) {
+				// no results - page is off the edge of the world
+				$this->images[$i] = null;				
+			} else if ($i >= $start && $i < ($start + $perPage)) {
+				// make sure we slot the found data into the correct place in the much larger array
 				$filename = $results[$indexIntoFoundImages]['filename'];
 				
 				// save the filename into the list of all images
@@ -100,7 +100,7 @@ class Photostream extends Album {
 				
 				$indexIntoFoundImages++;
 			} else {
-				// placeholder text
+				// placeholder text, if we haven't queried this 'window' in the entire list of images
 				$this->images[$i] = null;
 			}
 		}
