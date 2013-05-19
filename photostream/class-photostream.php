@@ -18,7 +18,7 @@ class Photostream extends Album {
 	 * Constructor for Photostream
 	 *
 	 * @param object &$gallery The parent gallery
-	 * @return Album
+	 * @return Photostream
 	 */
 	function Photostream(&$gallery, $sqlWhere="", $sqlGroupBy="", $sqlOrderBy="") {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
@@ -87,30 +87,31 @@ class Photostream extends Album {
 			$totalCount = $totalCounts['count'];
 		}
 		
-		// bake out the found image data
-		for ($i = 0; $i < $totalCount; $i++) {
-			if (sizeof($results) == 0) {
-				// no results - page is off the edge of the world
-				$this->images[$i] = null;				
-			} else if ($i >= $start && $i < ($start + $perPage)) {
-				// make sure we slot the found data into the correct place in the much larger array
-				$filename = $results[$indexIntoFoundImages]['filename'];
-				
-				// save the filename into the list of all images
-				$this->images[$i] = $filename;
-				
-				// save the DB results for use later on
-				$this->data[$filename] = $results[$indexIntoFoundImages];
-				$this->data[$filename]['album-data']['folder'] = $results[$indexIntoFoundImages]['folder'];
-				$this->data[$filename]['album-data']['title'] = $results[$indexIntoFoundImages]['album_title'];
-				$this->data[$filename]['album-data']['show'] = $results[$indexIntoFoundImages]['album_show'];
-				$this->data[$filename]['album-data']['dynamic'] = $results[$indexIntoFoundImages]['album_dynamic'];
-				
-				$indexIntoFoundImages++;
-			} else {
-				// placeholder text, if we haven't queried this 'window' in the entire list of images
-				$this->images[$i] = null;
-			}
+		// keep track of total count as number, 
+		// because size of images array is just # images on this page
+		$this->totalCount = $totalCount;
+		
+		// how many images on this page?
+		// when on last page, might be less than $perPage value
+		if (sizeof($results) < $perPage) {
+			$countPage = sizeof($results);
+		} else {
+			$countPage = $perPage;
+		}
+		
+		// bake out found image data
+		for ($i = 0; $i < $countPage; $i++) {
+			$filename = $results[$i]['filename'];
+			
+			// save the filename into the list of all images
+			$this->images[$i] = $filename;
+			
+			// save the DB results for use later on
+			$this->data[$filename] = $results[$i];
+			$this->data[$filename]['album-data']['folder'] = $results[$i]['folder'];
+			$this->data[$filename]['album-data']['title'] = $results[$i]['album_title'];
+			$this->data[$filename]['album-data']['show'] = $results[$i]['album_show'];
+			$this->data[$filename]['album-data']['dynamic'] = $results[$i]['album_dynamic'];
 		}
 	}
 	
@@ -126,42 +127,16 @@ class Photostream extends Album {
 	 * @return array
 	 */
 	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null, $care=true) {
-		// Return the cut of images based on $page. Page 0 means show all.
-		if ($page == 0) {
-			return $this->images;
-		} else {
-			// Only return $firstPageCount images if we are on the first page and $firstPageCount > 0
-			if (($page==1) && ($firstPageCount>0)) {
-				$pageStart = 0;
-				$images_per_page = $firstPageCount;
-
-			} else {
-				if ($firstPageCount>0) {
-					$fetchPage = $page - 2;
-				} else {
-					$fetchPage = $page - 1;
-				}
-				$images_per_page = max(1, getOption('photostream_images_per_page'));
-				$pageStart = $firstPageCount + $images_per_page * $fetchPage;
-			}
-			if (sizeof($this->images) > 0)
-			{
-				return array_slice($this->images, $pageStart , $images_per_page);
-			}
-			return $this->images;
-		}
+		return $this->images;
 	}
 	
 	/**
-	 * Returns the number of images in this album (not counting its subalbums)
+	 * Returns the number of images in this photostream
 	 *
 	 * @return int
 	 */
 	function getNumImages() {
-		if (is_null($this->images)) {
-			return count($this->getImages(0,0,NULL,NULL,false));
-		}
-		return count($this->images);
+		return $this->totalCount;
 	}
 	
 	// overloaded functions inherited from Album
