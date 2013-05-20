@@ -126,7 +126,7 @@ class Photostream extends Album {
 	 *
 	 * @return array
 	 */
-	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null, $care=true) {
+	function getImages($page=0, $firstPageCount=0, $sorttype=null, $sortdirection=null, $care=true, $mine=NULL) {
 		return $this->images;
 	}
 	
@@ -141,8 +141,8 @@ class Photostream extends Album {
 	
 	// overloaded functions inherited from Album
 	// don't want them to do anything
-	function save() {}	
-	function loadFileNames($dirs=false) {}	
-	function getAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true) {}
+	function save() {}
+	function loadFileNames($dirs=false) {}
+	function getAlbums($page=0, $sorttype=null, $sortdirection=null, $care=true, $mine=NULL) {}
 }
 ?>
