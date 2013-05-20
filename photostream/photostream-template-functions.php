@@ -68,6 +68,27 @@ function next_photostream_image() {
 		return true;
 	}
 }
+
+/**
+ * Returns the title of the album that contains the current image.
+ *
+ * @return string
+ */
+function getAlbumTitleForPhotostreamImage() {
+	global $_zp_current_image;
+	return $_zp_current_image->getAlbum()->title;
+}
+
+/**
+ * Returns the folder name of the album that contains the current image.
+ *
+ * @return string
+ */
+function getAlbumFolderForPhotostreamImage() {
+	global $_zp_current_image;
+	return $_zp_current_image->getAlbumName();
+}
+
 /**
  * Returns a piece of text indicating the current slice of the photostream being displayed. 
  * In format "X to Y".

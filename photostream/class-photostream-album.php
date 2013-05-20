@@ -18,7 +18,7 @@ class PhotostreamAlbum extends Album {
 	 * @return Album
 	 */
 	function PhotostreamAlbum(&$gallery, $albumData) {
-		// load Album values from Photostram DB query
+		// load Album values from Photostream DB query
 		$this->data = $albumData;
 		$folder8 = $albumData['folder'];
 		
@@ -38,6 +38,11 @@ class PhotostreamAlbum extends Album {
 		
 		$this->name = $folder8;
 		$this->localpath = $localpath;
+		
+		// Map from database record to the current item
+		$this->title = $albumData['title'];
+		$this->show = $albumData['show'];
+		$this->dynamic = $albumData['dynamic'];
 	}
 	
 	// mocked out function to do nothing
