@@ -11,8 +11,12 @@
  *
  */
 function setCustomPhotostream($sqlWhere="", $sqlGroupBy="", $sqlOrderBy="") {
-	global $_zp_gallery, $_zp_current_photostream;
+	global $_zp_gallery, $_zp_current_photostream, $_zp_images;
 	
+	// reset the image collection to enable multiple calls from the same page
+	$_zp_images = null;
+	
+	// now create actual Photostream
 	$_zp_current_photostream = new Photostream($_zp_gallery, $sqlWhere, $sqlGroupBy, $sqlOrderBy);
 }
 
