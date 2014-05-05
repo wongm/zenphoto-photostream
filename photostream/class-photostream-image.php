@@ -8,7 +8,7 @@
 
 // force UTF-8 Ø
 
-class PhotostreamImage extends _Image {
+class PhotostreamImage extends Image {
 
 	function PhotostreamImage(&$album, $filename) {
 		
