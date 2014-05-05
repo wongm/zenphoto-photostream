@@ -285,7 +285,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 					?>
 					<li>
 						<?php
-						$k1 = $i - (int) ($i - $last)/2;
+						$k1 = $i - (int) (($i - $last) / 2);
 						printLink(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1));
 						?>
 					</li>
@@ -322,7 +322,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 				foreach ($nav as $i=>$link) {
 					$d = $i - $last;
 					if ($d > 2) {
-						$k1 = $i - (int) ($i - $last)/2;
+						$k1 = $i - (int) (($i - $last) / 2);
 						?>
 						<li>
 							<?php printLink(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
