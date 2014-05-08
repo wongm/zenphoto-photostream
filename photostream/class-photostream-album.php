@@ -36,7 +36,7 @@ class PhotostreamAlbum extends Album {
 			$localpath = getAlbumFolder() . $folderFS . "/";
 		}
 		
-		$this->name = $folder8;
+		$this->linkname = $this->name = $folder8;
 		$this->localpath = $localpath;
 		
 		// Map from database record to the current item
