@@ -19,6 +19,7 @@ require_once(dirname(__FILE__).'/photostream/class-photostream-album.php');
 require_once(dirname(__FILE__).'/photostream/class-photostream-image.php');
 require_once(dirname(__FILE__).'/photostream/photostream-template-functions.php');
 
+zp_register_filter('checkPageValidity', 'photostreamOptions::pageCount');
 
 /**
  * Plugin option handling class
@@ -26,11 +27,17 @@ require_once(dirname(__FILE__).'/photostream/photostream-template-functions.php'
  */
 class photostreamOptions {
 	
+	static function pageCount($count, $gallery_page, $page) {
+		if (stripSuffix($gallery_page) == 'photostream') {
+    		return true;
+		}
+	}
+	
 	function photostreamOptions() {
 		setOptionDefault('photostream_sort', "date");
 		setOptionDefault('photostream_images_per_page', getOption('images_per_page'));
 	}
-
+	
 	function getOptionsSupported() {
 		$list = array(gettext("Date") => "date",gettext("Image ID") => "imageid");
 		return array(	gettext('Images per page') => array('key' => 'photostream_images_per_page', 'type' => OPTION_TYPE_TEXTBOX,

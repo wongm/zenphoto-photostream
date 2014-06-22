@@ -171,7 +171,7 @@ function getNextPhotostreamPageURL()
  */
 function printNextPhotostreamPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
 	if (hasNextPage()) {
-		printLink(getNextPhotostreamPageURL(), $text, $title, $class, $id);
+		printLinkHTML(getNextPhotostreamPageURL(), $text, $title, $class, $id);
 	} else {
 		echo "<span class=\"disabledlink\">$text</span>";
 	}
@@ -187,7 +187,7 @@ function printNextPhotostreamPageLink($text, $title=NULL, $class=NULL, $id=NULL)
  */
 function printPrevPhotostreamPageLink($text, $title=NULL, $class=NULL, $id=NULL) {
 	if (hasPrevPage()) {
-		printLink(getPrevPhotostreamPageURL(), $text, $title, $class, $id);
+		printLinkHTML(getPrevPhotostreamPageURL(), $text, $title, $class, $id);
 	} else {
 		echo "<span class=\"disabledlink\">$text</span>";
 	}
@@ -253,7 +253,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 				<li class="prev">
 					<?php
 					if ($prev) {
-						printLink($prev, html_encode($prevtext), gettext('Previous Page'));
+						printLinkHTML($prev, html_encode($prevtext), gettext('Previous Page'));
 					} else {
 						?>
 						<span class="disabledlink"><?php echo html_encode($prevtext); ?></span>
@@ -271,7 +271,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 				if($current == 1) {
 					echo '1';
 				} else {
-					printLink($nav[1], 1, gettext("Page 1"));
+					printLinkHTML($nav[1], 1, gettext("Page 1"));
 				}
 				?>
 				</li>
@@ -286,7 +286,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 					<li>
 						<?php
 						$k1 = $i - (int) (($i - $last) / 2);
-						printLink(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1));
+						printLinkHTML(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1));
 						?>
 					</li>
 					<?php
@@ -295,7 +295,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 					<li>
 						<?php
 						$k1 = $last+1;
-						printLink(getPhotostreamPageURL($k1, $total), $k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1));
+						printLinkHTML(getPhotostreamPageURL($k1, $total), $k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1));
 						?>
 					</li>
 					<?php
@@ -307,7 +307,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 					echo $i;
 				} else {
 					$title = sprintf(ngettext('Page %1$u','Page %1$u', $i),$i);
-					printLink($link, $i, $title);
+					printLinkHTML($link, $i, $title);
 				}
 				?>
 				</li>
@@ -325,14 +325,14 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 						$k1 = $i - (int) (($i - $last) / 2);
 						?>
 						<li>
-							<?php printLink(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
+							<?php printLinkHTML(getPhotostreamPageURL($k1, $total), '...', sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
 						</li>
 						<?php
 					} else if ($d == 2) {
 						$k1 = $last+1;
 						?>
 						<li>
-							<?php printLink(getPhotostreamPageURL($k1, $total), $k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
+							<?php printLinkHTML(getPhotostreamPageURL($k1, $total), $k1, sprintf(ngettext('Page %u','Page %u',$k1),$k1)); ?>
 						</li>
 						<?php
 					}
@@ -342,7 +342,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 						if($current == $i)  {
 							echo $i;
 						} else {
-							printLink($link, $i, sprintf(ngettext('Page %u','Page %u',$i),$i));
+							printLinkHTML($link, $i, sprintf(ngettext('Page %u','Page %u',$i),$i));
 						}
 						?>
 					</li>
@@ -354,7 +354,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 				<li class="next">
 					<?php
 					if ($next) {
-						printLink($next, html_encode($nexttext), gettext('Next Page'));
+						printLinkHTML($next, html_encode($nexttext), gettext('Next Page'));
 					} else {
 						?>
 						<span class="disabledlink"><?php echo html_encode($nexttext); ?></span>
