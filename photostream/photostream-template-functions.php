@@ -78,9 +78,15 @@ function next_photostream_image() {
  *
  * @return string
  */
-function getAlbumTitleForPhotostreamImage() {
+function getAlbumTitleForPhotostreamImage($locale = NULL) {
 	global $_zp_current_image;
-	return $_zp_current_image->getAlbum()->title;
+	
+	$text = $_zp_current_image->getAlbum()->title;
+	if ($locale !== 'all') {
+		$text = get_language_string($text, $locale);
+	}
+	$text = zpFunctions::unTagURLs($text);
+	return $text;
 }
 
 /**
