@@ -11,7 +11,7 @@
 $plugin_description = gettext("Enables you to replicate the photostream functionaility of Flickr. Supports custom SQL on the images: WHRERE, ORDER BY and GROUP BY.");
 $plugin_author = "Marcus Wong (wongm)";
 $plugin_version = '1.0.0'; 
-$plugin_URL = "http://code.google.com/p/wongm-zenphoto-plugins/";
+$plugin_URL = "https://github.com/wongm/zenphoto-photostream/";
 $option_interface = 'photostreamOptions';
 
 require_once(dirname(__FILE__).'/photostream/class-photostream.php');
