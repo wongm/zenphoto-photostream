@@ -59,7 +59,7 @@ class photostreamOptions {
  */
 function getPhotostreamPageURL($page, $total=null)
 {
-	global $_zp_gallery_page;
+	global $_zp_gallery_page, $_zp_current_photostream;
 
 	$pg = substr($_zp_gallery_page, 0, -4);
 	$pagination1 = '/page/'.$pg.'/';
@@ -69,12 +69,12 @@ function getPhotostreamPageURL($page, $total=null)
 		if ($page == 1) {
 			// Just return the gallery base path for ZP_INDEX (no /page/x)
 			if (empty($pagination2)) {
-				return rewrite_path('/', '/');
+				return zp_apply_filter('getLink', rewrite_path('/', '/'), $_zp_current_photostream, $page);
 			} else {
-				return rewrite_path($pagination1, "/index.php?" . substr($pagination2, 0, -1));
+				return zp_apply_filter('getLink', rewrite_path($pagination1, "/index.php?" . substr($pagination2, 0, -1)), $_zp_current_photostream, $page);
 			}
 		} else if ($page > 1) {
-			return rewrite_path($pagination1 . $page . "/", "/index.php?" . $pagination2 . 'page=' . $page);
+			return zp_apply_filter('getLink', rewrite_path($pagination1 . $page . "/", "/index.php?" . $pagination2 . 'page=' . $page), $_zp_current_photostream, $page);
 		}
 	}
 }
