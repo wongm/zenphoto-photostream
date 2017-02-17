@@ -10,14 +10,14 @@
  * Adds custom SQL to filter the results returned
  *
  */
-function setCustomPhotostream($sqlWhere="", $sqlGroupBy="", $sqlOrderBy="") {
+function setCustomPhotostream($sqlWhere="", $sqlGroupBy="", $sqlOrderBy="", $sqlJoin="") {
 	global $_zp_gallery, $_zp_current_photostream, $_zp_images;
 	
 	// reset the image collection to enable multiple calls from the same page
 	$_zp_images = null;
 	
 	// now create actual Photostream
-	$_zp_current_photostream = new Photostream($_zp_gallery, $sqlWhere, $sqlGroupBy, $sqlOrderBy);
+	$_zp_current_photostream = new Photostream($_zp_gallery, $sqlWhere, $sqlGroupBy, $sqlOrderBy, $sqlJoin);
 }
 
 /**
@@ -351,7 +351,7 @@ function printPhotostreamPageListWithNav($prevtext, $nexttext, $oneImagePage=fal
 					?>
 					<li class="last<?php if ($current == $i) echo ' current'; ?>">
 						<?php
-						if($current == $i)  {
+						if($current == $i) {
 							echo $i;
 						} else {
 							printLinkHTML($link, $i, sprintf(ngettext('Page %u','Page %u',$i),$i));

@@ -13,6 +13,7 @@ class Photostream extends Album {
 	var $sqlWhere;
 	var $sqlOrderBy;
 	var $sqlGroupBy;
+	var $sqlJoin;
 	
 	/**
 	 * Constructor for Photostream
@@ -20,7 +21,7 @@ class Photostream extends Album {
 	 * @param object &$gallery The parent gallery
 	 * @return Photostream
 	 */
-	function Photostream(&$gallery, $sqlWhere="", $sqlGroupBy="", $sqlOrderBy="") {
+	function Photostream(&$gallery, $sqlWhere="", $sqlGroupBy="", $sqlOrderBy="", $sqlJoin="") {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
 			debugLogBacktrace('Bad gallery in instantiation of Photostream');
 			$gallery = $gallery;
@@ -57,23 +58,28 @@ class Photostream extends Album {
 			$this->sqlOrderBy = " ORDER BY $sqlOrderBy ";
 		} else {
 			// default for order by
-			if (getOption('photostream_sort') == 'imageid') {		
+			if (getOption('photostream_sort') == 'imageid') {
 				$this->sqlOrderBy = " ORDER BY i.id DESC ";
 			} else {
-				$this->sqlOrderBy = " ORDER BY i.date DESC ";				
+				$this->sqlOrderBy = " ORDER BY i.date DESC ";
 			}			
+		}
+		if (strlen($sqlJoin) > 0) {
+			$this->sqlJoin = " $sqlJoin ";
 		}
 		
 		$sql = "SELECT i.*, a.folder AS folder, a.title AS album_title, a.show AS album_show, a.dynamic AS album_dynamic
 			FROM " . prefix('images') . " i
 			INNER JOIN " . prefix('albums') . " a ON i.albumid = a.id 
+			$this->sqlJoin 
 			$this->sqlWhere $this->sqlGroupBy $this->sqlOrderBy LIMIT $start, $perPage";
 		$results = query_full_array($sql);
-			
+		
 		// get total number of images in gallery
 		$sql = "SELECT count(i.albumid) AS count FROM " . prefix('images') . "  i 
-					INNER JOIN " . prefix('albums') . " a ON i.albumid = a.id 
-					$this->sqlWhere $this->sqlGroupBy";					
+			INNER JOIN " . prefix('albums') . " a ON i.albumid = a.id 
+			$this->sqlJoin 
+			$this->sqlWhere $this->sqlGroupBy";
 		$totalCounts = query_full_array($sql);
 		
 		// we have a group by in the SQL query...
