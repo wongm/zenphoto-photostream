@@ -10,18 +10,18 @@
 
 class PhotostreamImage extends Image {
 
-	function PhotostreamImage(&$album, $filename) {
+	function PhotostreamImage(&$album, $photostreamImageKey) {
 		
 		global $_zp_current_album, $_zp_current_photostream, $_zp_gallery;
-				
+		
 		// This is where the magic happens...
 		// load Image data from the magic array from the earlier Photostream DB query
-		$this->data = $_zp_current_photostream->data[$filename];
+		$this->data = $_zp_current_photostream->data[$photostreamImageKey];		
 		$_zp_current_album = new PhotostreamAlbum($_zp_gallery, $this->data['album-data']);
 		
 		// $album is an Album object; it should already be created.
 		if (!is_object($_zp_current_album)) return NULL;
-		if (!$this->classSetup($_zp_current_album, $filename)) { // spoof attempt
+		if (!$this->classSetup($_zp_current_album, $this->data['filename'])) { // spoof attempt
 			$this->exists = false;
 			return;
 		}

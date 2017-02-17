@@ -107,17 +107,17 @@ class Photostream extends Album {
 		
 		// bake out found image data
 		for ($i = 0; $i < $countPage; $i++) {
-			$filename = $results[$i]['filename'];
 			
-			// save the filename into the list of all images
-			$this->images[$i] = $filename;
+			// save composite filename into the list of all images
+			$photostreamImageKey = $results[$i]['folder'] . "|||" . $results[$i]['filename'];
+			$this->images[$i] = $photostreamImageKey;
 			
 			// save the DB results for use later on
-			$this->data[$filename] = $results[$i];
-			$this->data[$filename]['album-data']['folder'] = $results[$i]['folder'];
-			$this->data[$filename]['album-data']['title'] = $results[$i]['album_title'];
-			$this->data[$filename]['album-data']['show'] = $results[$i]['album_show'];
-			$this->data[$filename]['album-data']['dynamic'] = $results[$i]['album_dynamic'];
+			$this->data[$photostreamImageKey] = $results[$i];
+			$this->data[$photostreamImageKey]['album-data']['folder'] = $results[$i]['folder'];
+			$this->data[$photostreamImageKey]['album-data']['title'] = $results[$i]['album_title'];
+			$this->data[$photostreamImageKey]['album-data']['show'] = $results[$i]['album_show'];
+			$this->data[$photostreamImageKey]['album-data']['dynamic'] = $results[$i]['album_dynamic'];
 		}
 	}
 	

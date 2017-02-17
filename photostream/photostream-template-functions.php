@@ -53,8 +53,8 @@ function next_photostream_image() {
 		set_context(ZP_INDEX | ZP_ALBUM);
 		$_zp_images = $_zp_current_photostream->getImages($_zp_page);
 		if (empty($_zp_images)) { return false; }
-		$img = array_shift($_zp_images);
-		$_zp_current_image = new PhotostreamImage($_zp_current_album, $img);
+		$photostreamImageKey = array_shift($_zp_images);
+		$_zp_current_image = new PhotostreamImage($_zp_current_album, $photostreamImageKey);
 		save_context();
 		add_context(ZP_IMAGE);
 		return true;
@@ -67,8 +67,8 @@ function next_photostream_image() {
 		restore_context();
 		return false;
 	} else {
-		$img = array_shift($_zp_images);
-		$_zp_current_image = new PhotostreamImage($_zp_current_album, $img);
+		$photostreamImageKey = array_shift($_zp_images);
+		$_zp_current_image = new PhotostreamImage($_zp_current_album, $photostreamImageKey);
 		return true;
 	}
 }
