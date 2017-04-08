@@ -33,7 +33,7 @@ class photostreamOptions {
 		}
 	}
 	
-	function photostreamOptions() {
+	function __construct() {
 		setOptionDefault('photostream_sort', "date");
 		setOptionDefault('photostream_images_per_page', getOption('images_per_page'));
 	}

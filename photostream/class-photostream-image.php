@@ -10,7 +10,7 @@
 
 class PhotostreamImage extends Image {
 
-	function PhotostreamImage(&$album, $photostreamImageKey) {
+	function __construct(&$album, $photostreamImageKey) {
 		
 		global $_zp_current_album, $_zp_current_photostream, $_zp_gallery;
 		

@@ -21,7 +21,7 @@ class Photostream extends Album {
 	 * @param object &$gallery The parent gallery
 	 * @return Photostream
 	 */
-	function Photostream(&$gallery, $sqlWhere="", $sqlGroupBy="", $sqlOrderBy="", $sqlJoin="") {
+	function __construct(&$gallery, $sqlWhere="", $sqlGroupBy="", $sqlOrderBy="", $sqlJoin="") {
 		if (!is_object($gallery) || strtolower(get_class($gallery)) != 'gallery') {
 			debugLogBacktrace('Bad gallery in instantiation of Photostream');
 			$gallery = $gallery;

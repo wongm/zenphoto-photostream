@@ -17,7 +17,7 @@ class PhotostreamAlbum extends Album {
 	 * @param string $albumData Array data for this Album, from the earlier Photostream DB query
 	 * @return Album
 	 */
-	function PhotostreamAlbum(&$gallery, $albumData) {
+	function __construct(&$gallery, $albumData) {
 		// load Album values from Photostream DB query
 		$this->data = $albumData;
 		$folder8 = $albumData['folder'];
