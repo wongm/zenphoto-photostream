@@ -43,6 +43,7 @@ class PhotostreamAlbum extends Album {
 		$this->title = $albumData['title'];
 		$this->show = $albumData['show'];
 		$this->dynamic = $albumData['dynamic'];
+		$this->count = $albumData['count'];
 	}
 	
 	// mocked out function to do nothing

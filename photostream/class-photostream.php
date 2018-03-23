@@ -39,6 +39,7 @@ class Photostream extends Album {
 		$perPage = max(1, getOption('photostream_images_per_page'));
 		$start = (($page * $perPage) - $perPage);
 		$end = $start + $perPage;
+		$selectCount = "0 AS album_count";
 		
 		// Add custom search / group by / ordering parameters
 		// Also ensure security for unpublished images, and images in unpublished albums
@@ -53,6 +54,7 @@ class Photostream extends Album {
 		}
 		if (strlen($sqlGroupBy) > 0) {
 			$this->sqlGroupBy = " GROUP BY $sqlGroupBy ";
+			$selectCount = "count(i.albumid) AS album_count";
 		}
 		if (strlen($sqlOrderBy) > 0) {
 			$this->sqlOrderBy = " ORDER BY $sqlOrderBy ";
@@ -68,7 +70,7 @@ class Photostream extends Album {
 			$this->sqlJoin = " $sqlJoin ";
 		}
 		
-		$sql = "SELECT i.*, a.folder AS folder, a.title AS album_title, a.show AS album_show, a.dynamic AS album_dynamic
+		$sql = "SELECT i.*, a.folder AS folder, a.title AS album_title, a.show AS album_show, a.dynamic AS album_dynamic, $selectCount
 			FROM " . prefix('images') . " i
 			INNER JOIN " . prefix('albums') . " a ON i.albumid = a.id 
 			$this->sqlJoin 
@@ -118,6 +120,7 @@ class Photostream extends Album {
 			$this->data[$photostreamImageKey]['album-data']['title'] = $results[$i]['album_title'];
 			$this->data[$photostreamImageKey]['album-data']['show'] = $results[$i]['album_show'];
 			$this->data[$photostreamImageKey]['album-data']['dynamic'] = $results[$i]['album_dynamic'];
+			$this->data[$photostreamImageKey]['album-data']['count'] = $results[$i]['album_count'];
 		}
 	}
 	
