@@ -92,7 +92,7 @@ function getAlbumTitleForPhotostreamImage($locale = NULL) {
 	if ($locale !== 'all') {
 		$albumTitle = get_language_string($albumTitle, $locale);
 	}
-	return zpFunctions::unTagURLs($albumTitle);
+	return unTagURLs($albumTitle);
 }
 
 /**
