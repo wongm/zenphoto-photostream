@@ -84,8 +84,11 @@ class Photostream extends Album {
 			$this->sqlWhere $this->sqlGroupBy";
 		$totalCounts = query_full_array($sql);
 		
+		// empty result set
+		if (sizeof($totalCounts) == 0) {
+			$totalCount = 0;
 		// we have a group by in the SQL query...
-		if (sizeof($totalCounts) > 1) {
+		} else if (sizeof($totalCounts) > 1) {
 			$totalCount = sizeof($totalCounts);
 		// normal query
 		} else if (is_numeric($totalCounts[0]['count'])) {
