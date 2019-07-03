@@ -40,6 +40,6 @@ class PhotostreamImage extends Image {
 	
 	// overloaded functions inherited from _Image
 	// don't want them to do anything
-	function save() {}
+	function save($checkupdates = false) {}
 }
 ?>
